@@ -1,0 +1,2 @@
+echo -n | openssl s_client -connect wiprodigital.com:443 -servername wiprodigital.com -showcerts | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > wipro.cert
+keytool -import -v -file wipro.cert -keystore wipro.jks -storepass buildit

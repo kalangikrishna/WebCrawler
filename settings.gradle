@@ -1,0 +1,12 @@
+pluginManagement {
+    repositories {
+//        mavenCentral()
+//        mavenLocal()
+        maven {
+            url 'https://nexus.ss.aws.tbcloud.org/repository/gradle-plugins/'
+        }
+    }
+}
+
+rootProject.name = 'Web-Crawler'
+
