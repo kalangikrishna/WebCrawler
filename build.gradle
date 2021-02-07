@@ -1,6 +1,6 @@
 plugins {
-//    id 'org.springframework.boot' version '2.3.8.RELEASE'
-//    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'org.springframework.boot' version '2.3.8.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'java'
     id 'idea'
 }
@@ -11,25 +11,17 @@ description = 'web-crawler-service'
 
 sourceCompatibility = 1.8
 
-//springBoot {
-//    mainClassName = 'com.buildit.crawler.WebCrawlerApplication'
-//}
+springBoot {
+    mainClassName = 'com.buildit.crawler.WebCrawlerApplication'
+}
 
 repositories {
-//    mavenLocal()
-//    mavenCentral()
-    maven {
-        url = uri('https://nexus.ss.aws.tbcloud.org/repository/maven-central/')
-    }
-
-    maven {
-        url = uri('https://nexus.ss.aws.tbcloud.org/repository/mobile-internal/')
-    }
+    mavenLocal()
+    mavenCentral()
 }
 
 dependencies {
-//    implementation 'org.springframework.boot:spring-boot-devtools'
-//    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework:spring-beans:5.2.12.RELEASE'
     implementation 'org.springframework:spring-context:5.2.12.RELEASE'
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
@@ -41,14 +33,14 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.16'
     annotationProcessor 'org.projectlombok:lombok:1.18.16'
 
-//    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.mockito:mockito-core:3.3.3'
     testImplementation 'junit:junit:4.13.1'
 }
 
-//bootJar {
-//    manifest {
-//        attributes 'Implementation-Title'   : "${rootProject.name}"
-//        attributes 'Implementation-Version' : "${project.version}"
-//    }
-//}
+bootJar {
+    manifest {
+        attributes 'Implementation-Title'   : "${rootProject.name}"
+        attributes 'Implementation-Version' : "${project.version}"
+    }
+}

@@ -9,13 +9,15 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.io.PrintWriter;
+import java.util.*;
 import java.util.stream.IntStream;
 
 import static com.buildit.crawler.util.UrlUtil.isUrlEligibleToTraverse;
@@ -28,6 +30,7 @@ public class WebCrawlerService {
     private ClientBuilder clientBuilder;
     private ParserService parserService;
     private String domainName;
+    private String crawlResult = "";
 
     WebCrawlerService(ClientBuilder clientBuilder, ParserService parserService) {
         this.clientBuilder = clientBuilder;
@@ -40,7 +43,15 @@ public class WebCrawlerService {
                 .build();
         domainName = request.url().topPrivateDomain();
         try {
-            crawlWebsite(clientBuilder.getSslEnabledHttpclient(), request, baseUrl, new ArrayList<>(), 0);
+            crawlWebsite(clientBuilder.getSslEnabledHttpclient(), request, baseUrl, new HashSet<>(), 0);
+            if (crawlResult.length() > 0) {
+                try (FileWriter fileWriter = new FileWriter("crawlResult.txt")) {
+                    PrintWriter printWriter = new PrintWriter(fileWriter);
+                    printWriter.print(crawlResult);
+                } catch (IOException ex) {
+                    log.error("Error writing crawl result to file");
+                }
+            }
         } catch (ClientException e) {
             log.error("Error retrieving client");
             throw new ServiceException("Error retrieving client", e);
@@ -48,7 +59,7 @@ public class WebCrawlerService {
     }
 
 
-    private void crawlWebsite(OkHttpClient client, Request request, String url, List<String> traversedList, int traverseDepth) {
+    private void crawlWebsite(OkHttpClient client, Request request, String url, Set<String> traversedList, int traverseDepth) {
         if (url.endsWith("/")) {
             url = url.substring(0,url.length()-1);
         }
@@ -64,10 +75,10 @@ public class WebCrawlerService {
 
             String depthRepeater = String.join("", Collections.nCopies(traverseDepth, "\t"));
             log.info(depthRepeater + url);
+            crawlResult = crawlResult.concat(depthRepeater + url + "\n");
             traversedList.add(url);
 
             NodeList anchorTags = document.getElementsByTagName("a");
-//            log.info("Number of hyperlinks found" + anchorTags.getLength());
             int newTraverseDepth = ++traverseDepth;
 
             IntStream.range(0, anchorTags.getLength()).forEach(idx -> {

@@ -3,6 +3,7 @@ package com.buildit.crawler.util;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Set;
 
 public class UrlUtil {
 
@@ -17,7 +18,7 @@ public class UrlUtil {
         }
     }
 
-    public static boolean isUrlEligibleToTraverse(String url, List<String> traversedList) {
+    public static boolean isUrlEligibleToTraverse(String url, Set<String> traversedList) {
         boolean isEligible = !url.matches(".*/#.*$");
         int queryParamBeginIndex = url.indexOf("/?");
         if (queryParamBeginIndex > 0) {
